@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KPhoen\RulerZBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -13,8 +13,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Kévin Gomez <contact@kevingomez.fr>
  */
-class CacheClearCommand extends ContainerAwareCommand
+class CacheClearCommand extends Command
 {
+    private $cacheDir;
+    private $filesystem;
+
+    public function __construct($cacheDir, $filesystem)
+    {
+        $this->cacheDir = $cacheDir;
+        $this->filesystem = $filesystem;
+
+        parent::__construct();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -31,16 +42,13 @@ class CacheClearCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cacheDir = $this->getContainer()->getParameter('rulerz.cache_directory');
-        $filesystem = $this->getContainer()->get('filesystem');
-
-        if (!is_writable($cacheDir)) {
-            throw new \RuntimeException(sprintf('Unable to write in the "%s" directory', $cacheDir));
+        if (!is_writable($this->cacheDir)) {
+            throw new \RuntimeException(sprintf('Unable to write in the "%s" directory', $this->cacheDir));
         }
 
-        if ($filesystem->exists($cacheDir)) {
-            $filesystem->remove($cacheDir);
-            $filesystem->mkdir($cacheDir);
+        if ($this->filesystem->exists($this->cacheDir)) {
+            $this->filesystem->remove($this->cacheDir);
+            $this->filesystem->mkdir($this->cacheDir);
         }
     }
 }
