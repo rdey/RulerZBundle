@@ -12,16 +12,16 @@
     },
     "require": {
         "php": ">=7.1",
-        "redeye/rulerz-bridge": "^2.0",
-        "redeye/rulerz": "^1.0",
-        "symfony/config": "^3.0|^4.0",
-        "symfony/framework-bundle": "^3.0|^4.0"
+        "redeye/rulerz-bridge": "^3.0",
+        "redeye/rulerz": "^2.0",
+        "symfony/config": "^4.4|^5.0",
+        "symfony/framework-bundle": "^4.4|^5.0"
     },
     "require-dev": {
         "liip/rmt": "^1.2",
-        "matthiasnoback/symfony-dependency-injection-test": "^3.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
         "mikey179/vfsstream": "^1.6",
         "phpunit/phpunit": "^7.1",
-        "symfony/phpunit-bridge": "^3.0|^4.0"
+        "symfony/phpunit-bridge": "^4.4|^5.0"
     }
 }
