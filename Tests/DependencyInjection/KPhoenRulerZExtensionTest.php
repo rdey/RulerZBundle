@@ -8,17 +8,15 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use org\bovigo\vfs\vfsStream;
 
 use KPhoen\RulerZBundle\DependencyInjection\KPhoenRulerZExtension;
+use org\bovigo\vfs\vfsStreamDirectory;
 use Symfony\Bridge\RulerZ\Validator\Constraints\RuleValidator;
 use RulerZ\RulerZ;
 
 class KPhoenRulerZExtensionTest extends AbstractExtensionTestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
-    protected $root;
+    protected vfsStreamDirectory $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -26,12 +24,12 @@ class KPhoenRulerZExtensionTest extends AbstractExtensionTestCase
         $this->setParameter('kernel.debug', true);
     }
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return [new KPhoenRulerZExtension()];
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return [
             'cache' => $this->root->url().'/cache',
@@ -61,12 +59,10 @@ class KPhoenRulerZExtensionTest extends AbstractExtensionTestCase
         $this->assertTrue(is_dir($this->root->url().'/cache'));
     }
 
-    /**
-     * @expectedException        \RuntimeException
-     * @expectedExceptionMessage Could not create cache directory
-     */
     public function testItThrowsIfTheCacheDirectoryCanNotBeCreated()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Could not create cache directory");
         $this->root = vfsStream::setup('rulerz_bundle', 0);
 
         $this->load();
@@ -86,11 +82,9 @@ class KPhoenRulerZExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderNotHasService('rulerz.target.elastica');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testUnknownTargetsCantBeLoaded()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->load([
             'targets' => [
                 'unknown' => null,
